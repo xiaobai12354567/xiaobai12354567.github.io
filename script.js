@@ -1,9 +1,7 @@
 // 博客文章列表配置
 const blogs = [
-    { title: "MySQL 索引优化", file: "posts/mysql-index.md", date: "2026-03-24", category: "mysql", excerpt: "深入理解 MySQL 索引原理" },
-    { title: "二叉树遍历算法", file: "posts/tree-traversal.md", date: "2026-03-23", category: "algorithm", excerpt: "前序、中序、后序遍历详解" },
-    { title: "Java 并发编程", file: "posts/java-concurrent.md", date: "2026-03-22", category: "java", excerpt: "线程池和并发工具类使用" },
-    { title: "我的第一篇博客", file: "posts/first-post.md", date: "2026-03-21", category: "mysql" },
+    
+    { title: "我的第一篇博客", file: "posts/first-post.md", date: "2026-03-21", category: "mysql" }
 ];
 
 let currentCategory = 'all';
