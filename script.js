@@ -131,7 +131,7 @@ function showAbout() {
             <p>💡 希望通过分享，能与更多技术爱好者交流进步。</p>
             <p>📧 联系我：18538615660@163.com</p>
             <hr style="margin: 2rem 0;">
-            <p style="color: #64748b;">✨ 博客由纯前端驱动，文章使用 Markdown 编写，发布只需添加 .md 文件并更新 posts.json。</p>
+            <p style="color: #64748b;">✨ 博客由纯前端驱动，文章使用 Markdown 编写。</p>
         </div>
     `;
 }

@@ -36,7 +36,7 @@ git push -u origin main
 
 然后在 GitHub 仓库设置中启用 GitHub Pages，选择 main 分支。
 
-几分钟后访问：https://你的用户名.github.io
+几分钟后访问：https://xiaobai12354567.github.io
 
 ## 注意事项
 - 仓库名必须是 `你的用户名.github.io`
