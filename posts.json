@@ -8,10 +8,10 @@
     }
     ,
     {
-        "title": "win wsl2实现使用ubuntu",
-        "file": "posts/linux.md",
+        "title": "Java面试八股文总结",
+        "file": "posts/Java面试八股文总结.md",
         "date": "2026-03-24",
-        "category": "other",
+        "category": "Java",
         "excerpt": "这是使用 Markdown 写的第二篇文章，欢迎阅读。"
     }
 ]
