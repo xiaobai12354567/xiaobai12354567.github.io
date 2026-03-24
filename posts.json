@@ -1,0 +1,9 @@
+[
+    {
+        "title": "我的第一篇博客",
+        "file": "posts/first-post.md",
+        "date": "2026-03-21",
+        "category": "other",
+        "excerpt": "这是使用 Markdown 写的第一篇文章，欢迎阅读。"
+    }
+]
