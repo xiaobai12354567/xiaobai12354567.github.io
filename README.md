@@ -28,7 +28,7 @@
 ```bash
 git init
 git add .
-git commit -m "Initial commit"
+git commit -m "白天黑夜切换,typora观感"
 git branch -M main
 git remote add origin https://github.com/xiaobai12354567/lali.github.io.git
 git push -u origin main

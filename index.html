@@ -7,13 +7,16 @@
     <link rel="stylesheet" href="style.css">
     <!-- Markdown 解析库 -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- 代码高亮（可选） -->
+    <!-- 代码高亮 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </head>
 <body>
     <div class="container">
         <aside class="sidebar">
+            <div class="theme-toggle">
+                <button id="themeSwitch" class="theme-btn">🌓 切换主题</button>
+            </div>
             <div class="profile">
                 <img src="avatar.jpg" alt="头像" class="avatar">
                 <h2>Larry</h2>
@@ -29,7 +32,7 @@
         </aside>
 
         <main class="content">
-            这是一个前端静态网站
+            <!-- 动态内容会渲染到这里 -->
         </main>
     </div>
 

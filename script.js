@@ -1,5 +1,5 @@
 // 全局变量
-let postsData = [];       // 存储从 posts.json 加载的文章列表
+let postsData = [];
 let currentCategory = 'all';
 
 // 获取分类的中文显示名
@@ -13,7 +13,7 @@ function getCategoryName(cat) {
     return map[cat] || cat;
 }
 
-// 加载文章索引 posts.json
+// 加载文章索引
 async function loadPostsIndex() {
     try {
         const response = await fetch('posts.json');
@@ -22,7 +22,6 @@ async function loadPostsIndex() {
     } catch (err) {
         console.error(err);
         postsData = [];
-        // 如果加载失败，显示提示
         document.querySelector('.content').innerHTML = `
             <h1>博客文章</h1>
             <div class="blog-content" style="text-align:center; padding:3rem;">
@@ -63,7 +62,6 @@ function renderBlogList(category) {
     });
     contentDiv.innerHTML = html;
 
-    // 给所有卡片绑定点击事件
     document.querySelectorAll('.blog-item').forEach(item => {
         item.addEventListener('click', () => {
             const file = item.dataset.file;
@@ -79,7 +77,6 @@ async function loadAndRenderPost(file, title) {
         const response = await fetch(file);
         if (!response.ok) throw new Error(`无法加载 ${file}`);
         const markdown = await response.text();
-        // 使用 marked 解析 markdown，并开启代码高亮
         marked.setOptions({
             highlight: function(code, lang) {
                 if (lang && hljs.getLanguage(lang)) {
@@ -95,15 +92,12 @@ async function loadAndRenderPost(file, title) {
             <button class="back-btn" id="backBtn">← 返回列表</button>
             <div class="blog-content">${htmlContent}</div>
         `;
-        // 重新高亮代码块
         document.querySelectorAll('pre code').forEach(block => {
             hljs.highlightElement(block);
         });
-        // 返回按钮事件
         document.getElementById('backBtn').addEventListener('click', () => {
             renderBlogList(currentCategory);
         });
-        // 更新页面标题（可选）
         document.title = `${title} - Larry's Blog`;
     } catch (err) {
         console.error(err);
@@ -131,7 +125,7 @@ function showAbout() {
             <p>💡 希望通过分享，能与更多技术爱好者交流进步。</p>
             <p>📧 联系我：18538615660@163.com</p>
             <hr style="margin: 2rem 0;">
-            <p style="color: #64748b;">✨ 博客由纯前端驱动，文章使用 Markdown 编写。</p>
+            <p style="color: var(--text-muted);">✨ 博客由纯前端驱动，文章使用 Markdown 编写。</p>
         </div>
     `;
 }
@@ -143,7 +137,6 @@ function initNav() {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const category = link.dataset.category;
-            // 更新激活状态
             navLinks.forEach(l => l.classList.remove('active'));
             link.classList.add('active');
             
@@ -156,11 +149,30 @@ function initNav() {
     });
 }
 
+// ========== 主题切换功能 ==========
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark');
+    } else {
+        document.body.classList.remove('dark');
+    }
+
+    const themeBtn = document.getElementById('themeSwitch');
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+        const isDark = document.body.classList.contains('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+}
+// =================================
+
 // 页面启动
 async function init() {
-    await loadPostsIndex();      // 加载文章索引
-    initNav();                   // 绑定导航事件
-    renderBlogList('all');       // 默认显示全部文章
+    await loadPostsIndex();
+    initNav();
+    initTheme();           // 初始化主题
+    renderBlogList('all');
 }
 
 init();
