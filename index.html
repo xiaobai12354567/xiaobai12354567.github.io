@@ -4,18 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Larry's Blog</title>
+    <!-- 字体图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <!-- Markdown 解析库 -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- 代码高亮 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <!-- 代码高亮（深色主题默认使用，浅色主题会覆盖为浅色） -->
+    <link id="hljs-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </head>
 <body>
     <div class="container">
         <aside class="sidebar">
             <div class="theme-toggle">
-                <button id="themeSwitch" class="theme-btn">🌓 切换主题</button>
+                <button id="themeSwitch" class="theme-btn">
+                    <i class="fas fa-moon"></i> 切换主题
+                </button>
             </div>
             <div class="profile">
                 <img src="avatar.jpg" alt="头像" class="avatar">
@@ -23,16 +27,16 @@
                 <p>学生 · 技术爱好者</p>
             </div>
             <nav>
-                <a href="#" class="nav-link active" data-category="all">📚 全部文章</a>
-                <a href="#" class="nav-link" data-category="mysql">🐬 MySQL</a>
-                <a href="#" class="nav-link" data-category="algorithm">🧠 算法</a>
-                <a href="#" class="nav-link" data-category="java">☕ Java</a>
-                <a href="#" class="nav-link" data-category="about">👤 关于我</a>
+                <a href="#" class="nav-link active" data-category="all"><i class="fas fa-book"></i> 全部文章</a>
+                <a href="#" class="nav-link" data-category="mysql"><i class="fas fa-database"></i> MySQL</a>
+                <a href="#" class="nav-link" data-category="algorithm"><i class="fas fa-brain"></i> 算法</a>
+                <a href="#" class="nav-link" data-category="java"><i class="fab fa-java"></i> Java</a>
+                <a href="#" class="nav-link" data-category="about"><i class="fas fa-user"></i> 关于我</a>
             </nav>
         </aside>
 
         <main class="content">
-            <!-- 动态内容会渲染到这里 -->
+            <!-- 动态内容渲染于此 -->
         </main>
     </div>
 

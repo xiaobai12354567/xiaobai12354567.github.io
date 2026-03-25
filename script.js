@@ -89,7 +89,7 @@ async function loadAndRenderPost(file, title) {
         
         const contentDiv = document.querySelector('.content');
         contentDiv.innerHTML = `
-            <button class="back-btn" id="backBtn">← 返回列表</button>
+            <button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> 返回列表</button>
             <div class="blog-content">${htmlContent}</div>
         `;
         document.querySelectorAll('pre code').forEach(block => {
@@ -103,7 +103,7 @@ async function loadAndRenderPost(file, title) {
         console.error(err);
         const contentDiv = document.querySelector('.content');
         contentDiv.innerHTML = `
-            <button class="back-btn" id="backBtn">← 返回列表</button>
+            <button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> 返回列表</button>
             <div class="blog-content" style="text-align:center; padding:2rem;">
                 <p>❌ 文章加载失败，请确保文件路径正确且文件存在。</p>
             </div>
@@ -149,21 +149,45 @@ function initNav() {
     });
 }
 
-// ========== 主题切换功能 ==========
+// ========== 主题切换功能（含代码高亮主题切换） ==========
+function setHighlightTheme(isDark) {
+    const hljsLink = document.getElementById('hljs-theme');
+    if (isDark) {
+        hljsLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css';
+    } else {
+        hljsLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
+    }
+}
+
 function initTheme() {
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
+    const isDark = savedTheme === 'dark';
+    if (isDark) {
         document.body.classList.add('dark');
+        setHighlightTheme(true);
     } else {
         document.body.classList.remove('dark');
+        setHighlightTheme(false);
     }
 
     const themeBtn = document.getElementById('themeSwitch');
-    themeBtn.addEventListener('click', () => {
-        document.body.classList.toggle('dark');
-        const isDark = document.body.classList.contains('dark');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
+    if (themeBtn) {
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            const nowDark = document.body.classList.contains('dark');
+            localStorage.setItem('theme', nowDark ? 'dark' : 'light');
+            setHighlightTheme(nowDark);
+            // 更新按钮图标
+            const icon = themeBtn.querySelector('i');
+            if (nowDark) {
+                icon.className = 'fas fa-sun';
+                themeBtn.innerHTML = '<i class="fas fa-sun"></i> 切换主题';
+            } else {
+                icon.className = 'fas fa-moon';
+                themeBtn.innerHTML = '<i class="fas fa-moon"></i> 切换主题';
+            }
+        });
+    }
 }
 // =================================
 
@@ -171,7 +195,7 @@ function initTheme() {
 async function init() {
     await loadPostsIndex();
     initNav();
-    initTheme();           // 初始化主题
+    initTheme();
     renderBlogList('all');
 }
 
