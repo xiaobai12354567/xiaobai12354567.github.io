@@ -157,13 +157,33 @@
     <div id="tools">
     <div class="progressbar-top"></div>
     
+    <div class="aplayer"></div>
     <link type="text/css" rel="stylesheet" href="/css/APlayer.css">
     <script type="text/javascript" src="/js/APlayer.min.js"></script>
-    <script type="text/javascript" src="/js/Meting.min.js"></script>
-    <script>
-        var meting_api = 'https://meting.sunbangyan.cn/api?server=:server&type=:type&id=:id&auth=:auth&r=:r';
+    <script type="text/javascript">
+        const aplayer = new APlayer({
+            container: document.querySelector(".aplayer"),
+            fixed: true,
+            autoplay: false,
+            loop: "all",
+            order: "random",
+            preload: "auto",
+            volume: 0.67,
+            mutex: true,
+            lrcType: 3,
+            audio: [
+                
+                    {
+                        name: "Endless Tears",
+                        artist: "CLIFF EDGE",
+                        cover: "/themes/LiveForCode/music/cover/Endless Tears.jpg",
+                        url: "/themes/LiveForCode/music/song/Endless Tears.mp3",
+                        lrc: "/themes/LiveForCode/music/lrc/Endless Tears.lrc"
+                    },
+                
+            ]
+        });
     </script>
-    <meting-js id="17810468977" lrcshow="false" server="netease" type="playlist" fixed="true" autoplay="false" loop="all" order="random" preload="auto" volume="0.67" mutex="true"></meting-js>
 
     <div class="wrap-right">
     <div class="wrap-right-hide">
@@ -553,7 +573,7 @@
         },
 
         Music : {
-            type : "Meting"
+            type : "APlayer"
         },
         APlayer : {
             container : ".aplayer",
