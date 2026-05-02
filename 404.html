@@ -704,34 +704,5 @@
     };
 </script>
     <script type="text/javascript" src="/js/index.js"></script>
-    
-    <!-- 深色模式切换按钮 -->
-    <button id="darkModeToggle" style="position:fixed; bottom:20px; right:20px; z-index:9999; padding:8px 12px; cursor:pointer;">🌙 深色</button>
-    
-    <script>
-    (function() {
-        const toggle = document.getElementById('darkModeToggle');
-        const html = document.documentElement;
-        
-        function setDarkMode(enable) {
-            if (enable) {
-                html.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-                toggle.innerHTML = '☀️ 浅色';
-            } else {
-                html.removeAttribute('data-theme');
-                localStorage.setItem('theme', 'light');
-                toggle.innerHTML = '🌙 深色';
-            }
-        }
-        
-        const savedTheme = localStorage.getItem('theme');
-        setDarkMode(savedTheme === 'dark');
-        
-        toggle.addEventListener('click', () => {
-            setDarkMode(!html.hasAttribute('data-theme'));
-        });
-    })();
-    </script>
 </body>
 </html>
