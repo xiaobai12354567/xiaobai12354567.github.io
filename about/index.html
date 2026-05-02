@@ -29,6 +29,52 @@
     <link type="text/css" rel="stylesheet" href="/css/code.css">
 
     <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+    
+    <style>
+        /* 深色模式切换按钮样式 */
+        #darkModeToggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 9999;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        #darkModeToggle:hover {
+            transform: scale(1.1);
+        }
+        
+        /* 深色模式样式 */
+        body.dark-mode {
+            background-color: #1a1a2e;
+            filter: invert(1) hue-rotate(180deg);
+        }
+        body.dark-mode img,
+        body.dark-mode video {
+            filter: invert(1) hue-rotate(180deg);
+        }
+        /* 如果不想图片也反色，用下面这个更精细的版本 */
+        /*
+        body.dark-mode {
+            background-color: #1a1a2e;
+            color: #eee;
+        }
+        body.dark-mode .article-content {
+            background-color: #16213e;
+        }
+        body.dark-mode a {
+            color: #6c63ff;
+        }
+        */
+    </style>
 <meta name="generator" content="Hexo 8.1.1"></head>
 <body>
     <a id="cover"></a>
@@ -688,5 +734,35 @@
     };
 </script>
     <script type="text/javascript" src="/js/index.js"></script>
+    
+    <!-- 深色模式切换按钮 -->
+    <button id="darkModeToggle" title="切换深色/浅色模式">🌓</button>
+    
+    <script>
+    (function() {
+        const toggle = document.getElementById('darkModeToggle');
+        const isDark = localStorage.getItem('darkMode') === 'true';
+        
+        function setDarkMode(enable) {
+            if (enable) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'true');
+                toggle.innerHTML = '☀️';
+                toggle.title = '切换到浅色模式';
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', 'false');
+                toggle.innerHTML = '🌙';
+                toggle.title = '切换到深色模式';
+            }
+        }
+        
+        setDarkMode(isDark);
+        
+        toggle.addEventListener('click', () => {
+            setDarkMode(!document.body.classList.contains('dark-mode'));
+        });
+    })();
+    </script>
 </body>
 </html>
