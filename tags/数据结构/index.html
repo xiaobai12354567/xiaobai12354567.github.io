@@ -9,7 +9,7 @@
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <title>
         
-            
+            标签 - 数据结构
         
     </title>
     <link rel="shortcut icon" href="#"/>
@@ -32,28 +32,15 @@
 <meta name="generator" content="Hexo 8.1.1"></head>
 <body>
     <a id="cover"></a>
-    <link type="text/css" rel="stylesheet" href="/css/post.css">
+    <link type="text/css" rel="stylesheet" href="/css/archive.css">
 <div id="header" class="header">
     <div class="vertical">
         <div class="inner">
             
-                <h1 class="header-subtitle"></h1>
+                <h1 class="header-subtitle">标签归档</h1>
                 <div class="header-subinfo">
-                    <p class="article-info-text">
-                        <span>
-                            <i class="iconfont icon-time"></i> 发表时间：2026-05-02
-                        </span>
-                        
-                            
-                                <span id="/2026/05/02/2026-05-02-力扣-二叉搜索树/" class="leancloud_visitors" data-flag-title="">
-                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
-                                </span>
-                            
-                              
-                        
-                    </p>
-                    
-                    
+                    <p class="article-info-text Chinese"></p>
+                    <p class="article-info-text English"></p>                  
                 </div>
             
         </div>
@@ -62,70 +49,37 @@
 </div>
 <div id="container">
     
-        <!-- 文章页面 -->
-        <div id="article">
-            <div class="toc"></div>
-            <div class="article-body">
-                <p>​—<br>title: 力扣每日一题20260502<br>date: 2026-05-02<br>categories:                </p>
-<ul>
-<li>算法<br>tags:                      </li>
-<li>算法</li>
-<li>数据结构<br>​—</li>
-</ul>
-<p>题目链接:     <a target="_blank" rel="noopener" href="https://leetcode.cn/problems/kth-smallest-element-in-a-bst/">二叉搜索树中第 K 小的元素</a></p>
-<h2 id="二叉搜索树的性质"><a href="#二叉搜索树的性质" class="headerlink" title="二叉搜索树的性质"></a>二叉搜索树的性质</h2><ol>
-<li><strong>左子树性质</strong><br> 任意节点的<strong>左子树</strong>中所有节点的值 <strong>都小于</strong> 该节点的值。</li>
-<li><strong>右子树性质</strong><br> 任意节点的<strong>右子树</strong>中所有节点的值 <strong>都大于</strong> 该节点的值。</li>
-<li><strong>递归性</strong><br> 左子树和右子树本身也必须是二叉搜索树（即递归满足以上两条性质）。</li>
-<li><strong>没有重复节点（通常情况）</strong><br> 标准的 BST 通常假设节点值唯一（不包含相等的值）。若有重复值，可以约定放在左子树或右子树（实践中常扩展定义）。</li>
-<li><strong>中序遍历是有序序列</strong><br> 对 BST 进行<strong>中序遍历</strong>（左 → 根 → 右），得到的结果是一个 <strong>严格递增</strong> 的序列。这是 BST 最重要的一个实用性质。</li>
-</ol>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>本题主要考察第五个性质, 中序遍历二叉树,并计数,即可得到第k小的节点值. </p>
-<p>参考代码:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> cnt=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> ans=-<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">kthSmallest</span><span class="params">(TreeNode root, <span class="type">int</span> k)</span> &#123;</span><br><span class="line">        inorder(root,k);</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//中序遍历</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">inorder</span><span class="params">(TreeNode root,<span class="type">int</span> k)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(root==<span class="literal">null</span>||ans!=-<span class="number">1</span>) <span class="keyword">return</span> ;</span><br><span class="line">        inorder(root.left,k);</span><br><span class="line">        cnt++;</span><br><span class="line">        <span class="keyword">if</span>(cnt==k)</span><br><span class="line">        &#123;</span><br><span class="line">            ans=root.val;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        inorder(root.right,k);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="易错"><a href="#易错" class="headerlink" title="易错"></a>易错</h2><p>刚写的时候写错了,找不出自己错哪里了,原来我把cnt当做函数形参传递了(初始为0),其他没变化.</p>
-<p>为啥这样不对?</p>
-<p>因为java只有值传递,  每一次进入递归函数 对cnt++的操作只会在当前栈帧有效, 对其他栈帧的cnt没影响..</p>
-<p>模拟一下,当初次进入递归函数, cnt&#x3D;0,会一直向左子树递归,然后就导致一路上的cnt都是0,  就导致返回的时候,cnt变化了, 但是那一路上的cnt还都是0.  就导致错误了 。</p>
-<p>下面是另一个版本(ai):</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">kthSmallest</span><span class="params">(TreeNode root, <span class="type">int</span> k)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> inorder(root, <span class="keyword">new</span> <span class="title class_">int</span>[]&#123;k&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="title function_">inorder</span><span class="params">(TreeNode root, <span class="type">int</span>[] k)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="literal">null</span>) <span class="keyword">return</span> -<span class="number">1</span>;  <span class="comment">// 未找到</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 左子树</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">leftResult</span> <span class="operator">=</span> inorder(root.left, k);</span><br><span class="line">        <span class="keyword">if</span> (k[<span class="number">0</span>] == <span class="number">0</span>) <span class="keyword">return</span> leftResult;  <span class="comment">// 已经在左子树找到</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 当前节点</span></span><br><span class="line">        k[<span class="number">0</span>]--;  <span class="comment">// 相当于 cnt++，但这里直接消耗 k</span></span><br><span class="line">        <span class="keyword">if</span> (k[<span class="number">0</span>] == <span class="number">0</span>) <span class="keyword">return</span> root.val;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 右子树</span></span><br><span class="line">        <span class="keyword">return</span> inorder(root.right, k);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-                
-                <p class="end">__END__</p>
-            </div>
-            <div class="article-footer">
-                <div class="suffix-box">
-    <div class="suffix-box-left">
-        <img src="/image/sidebar/avatar.jpg" alt=" Larry4L's blog ">
-    </div>
-    <div class="suffix-box-right">
-        <span class="suffix-box-title">文章作者：</span> Larry4L's blog 
-        <br>
-        <span class="suffix-box-title">文章出处：</span><a href="/2026/05/02/2026-05-02-%E5%8A%9B%E6%89%A3-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" target="_blank"></a>
-        <br>
-        <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
-        <br>
-        <span class="suffix-box-title">关于主题：</span><a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Love</a>
-        <br>
-        <span class="suffix-box-title">版权声明：</span>文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
-        <br>
-    </div>
-    <div style="clear: both;"></div>
-</div>
-                
-                
-                <div class="article-prev-next">
+        
+            <!-- 归档页面、分类归档页面、标签归档页面 -->
+            <div class="articles">
+                <div class="articles-wrap">
+                    <span class="archive-move-on"></span>
+                    <span class="archive-counter">
+                        
+                            当前标签：<span class="tag">数据结构</span>
+                        
+                    </span>
                     
-                        <a href="/2026/05/02/2026-05-02-%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/" class="prev-prefix">« </a> 上一篇：    <a href="/2026/05/02/2026-05-02-%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/" title="发布于 2026-05-02 10:32">我的第一篇文章</a>
-                        <br>
                     
+                        
+                            <div class="archive-title">
+                                <h2 class="archive-year">2026</h2>
+                            </div>
+                            
+                           
+                        <div class="article">
+                            <div class="article-header">
+                                <h1 class="article-title"><a href="/2026/05/02/%E5%8A%9B%E6%89%A3%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%9820260502/"><span>力扣每日一题20260502</span></a></h1>
+                                <div class="article-meta">
+                                    <span class="article-time">05-02</span>
+                                </div>
+                            </div>
+                        </div>
                     
                 </div>
             </div>
-             
-        </div>
+            
+        
     
 </div>
     <div id="footer">
