@@ -75,7 +75,7 @@
 </div>
                     
                 </div>
-                 
+                
             </div>
         
     
@@ -170,13 +170,33 @@
     <div id="tools">
     <div class="progressbar-top"></div>
     
+    <div class="aplayer"></div>
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xiaobai12354567/blog-CDN@master/static/css/APlayer.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/xiaobai12354567/blog-CDN@master/static/js/APlayer.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/xiaobai12354567/blog-CDN@master/static/js/Meting.min.js"></script>
-    <script>
-        var meting_api = 'https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&auth=:auth&r=:r';
+    <script type="text/javascript">
+        const aplayer = new APlayer({
+            container: document.querySelector(".aplayer"),
+            fixed: true,
+            autoplay: false,
+            loop: "all",
+            order: "random",
+            preload: "auto",
+            volume: 0.67,
+            mutex: true,
+            lrcType: 3,
+            audio: [
+                
+                    {
+                        name: "Endless Tears",
+                        artist: "CLIFF EDGE",
+                        cover: "https://cdn.jsdelivr.net/gh/xiaobai12354567/blog-CDN@master/static/music/cover/Endless Tears.jpg",
+                        url: "https://cdn.jsdelivr.net/gh/xiaobai12354567/blog-CDN@master/static/music/song/Endless Tears.mp3",
+                        lrc: "https://cdn.jsdelivr.net/gh/xiaobai12354567/blog-CDN@master/static/music/lrc/Endless Tears.lrc"
+                    },
+                
+            ]
+        });
     </script>
-    <meting-js id="3778678" lrcshow="false" server="netease" type="playlist" fixed="true" autoplay="false" loop="all" order="random" preload="auto" volume="0.67" mutex="true"></meting-js>
 
     <div class="wrap-right">
     <div class="wrap-right-hide">
@@ -558,7 +578,7 @@
         },
 
         Music : {
-            type : "Meting"
+            type : "APlayer"
         },
         APlayer : {
             container : ".aplayer",
