@@ -9,7 +9,7 @@
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <title>
         
-            归档
+            力扣每日一题20260506
         
     </title>
     <link rel="shortcut icon" href="#"/>
@@ -32,94 +32,127 @@
 <meta name="generator" content="Hexo 8.1.1"></head>
 <body>
     <a id="cover"></a>
-    <link type="text/css" rel="stylesheet" href="/css/archive.css">
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link type="text/css" rel="stylesheet" href="/css/post.css">
 <div id="header" class="header">
     <div class="vertical">
         <div class="inner">
             
-                <h1 class="header-subtitle">归档</h1>
+                <h1 class="header-subtitle">力扣每日一题20260506</h1>
                 <div class="header-subinfo">
-                    <p class="article-info-text Chinese"></p>
-                    <p class="article-info-text English"></p>                  
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2026-05-06
+                        </span>
+                    </p>
+                    
+                        
+                            <span class="category-color">算法</span>
+                        
+                    
+                    
+                        
+                            <span class="tag-color">模拟</span>
+                        
+                    
                 </div>
             
         </div>
     </div>
     
 </div>
+
+<div style="text-align:center; margin:10px 0;">
+    <span id="busuanzi_container_page_pv">
+        阅读量: <span id="busuanzi_value_page_pv"></span> 次
+    </span>
+</div>
+
 <div id="container">
     
-        
-            <!-- 归档页面、分类归档页面、标签归档页面 -->
-            <div class="articles">
-                <div class="articles-wrap">
-                    <span class="archive-move-on"></span>
-                    <span class="archive-counter">
+        <!-- 文章页面 -->
+        <div id="article">
+            <div class="toc"></div>
+            <div class="article-body">
+                <h1 id="1861-旋转盒子"><a href="#1861-旋转盒子" class="headerlink" title="1861. 旋转盒子"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/rotating-the-box/">1861. 旋转盒子</a></h1><p>目前只写了暴力模拟过了,   感觉很笨</p>
+<p>先发出来</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">char</span>[][] rotateTheBox(<span class="type">char</span>[][] boxGrid) &#123;</span><br><span class="line">        <span class="type">int</span> n=boxGrid.length;</span><br><span class="line">        <span class="type">int</span> m=boxGrid[<span class="number">0</span>].length;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j=m-<span class="number">2</span>;j&gt;=<span class="number">0</span>;j--)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(boxGrid[i][j]==<span class="string">&#x27;#&#x27;</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">for</span>(<span class="type">int</span> k=j+<span class="number">1</span>;k&lt;m;k++)</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">if</span>((boxGrid[i][k]==<span class="string">&#x27;*&#x27;</span>||boxGrid[i][k]==<span class="string">&#x27;#&#x27;</span>)&amp;&amp;(j+<span class="number">1</span>)==k)   <span class="keyword">break</span>;</span><br><span class="line">                        <span class="keyword">if</span>(boxGrid[i][k]==<span class="string">&#x27;*&#x27;</span>||boxGrid[i][k]==<span class="string">&#x27;#&#x27;</span>)</span><br><span class="line">                        &#123;</span><br><span class="line">                            boxGrid[i][j]=<span class="string">&#x27;.&#x27;</span>;</span><br><span class="line">                            boxGrid[i][k-<span class="number">1</span>]=<span class="string">&#x27;#&#x27;</span>;</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">if</span>(k==m-<span class="number">1</span>)</span><br><span class="line">                        &#123;</span><br><span class="line">                            boxGrid[i][j]=<span class="string">&#x27;.&#x27;</span>;</span><br><span class="line">                            boxGrid[i][m-<span class="number">1</span>]=<span class="string">&#x27;#&#x27;</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">char</span>[][] ans=<span class="keyword">new</span> <span class="title class_">char</span>[m][n];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;m;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;n;j++)</span><br><span class="line">            &#123;</span><br><span class="line">                ans[i][j]=boxGrid[n - <span class="number">1</span> - j][i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="D:\larry4L-blog\source\image\image1.png"></p>
+<p>……</p>
+
+                
+                <p class="end">__END__</p>
+            </div>
+            <div class="article-footer">
+                <div class="suffix-box">
+    <div class="suffix-box-left">
+        <img src="https://cdn.jsdelivr.net/gh/xiaobai12354567/blog-CDN@master/static/image/sidebar/avatar.jpg" alt="Live For Code">
+    </div>
+    <div class="suffix-box-right">
+        <span class="suffix-box-title">文章作者：</span>Live For Code
+        <br>
+        <span class="suffix-box-title">文章出处：</span><a href="/2026/05/06/%E5%8A%9B%E6%89%A3%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%9820260506/" target="_blank">力扣每日一题20260506</a>
+        <br>
+        <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
+        <br>
+        <span class="suffix-box-title">关于主题：</span><a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+        <br>
+        <span class="suffix-box-title">版权声明：</span>文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+        <br>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+                
+                    <div class="category">
+                        分类：
                         
-                            目前共计 5 篇日志，继续加油！
+                            <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
                         
-                    </span>
-                    
-                    
+                    </div>
+                
+                
+                    <div class="tag">
+                        标签：
                         
-                            <div class="archive-title">
-                                <h2 class="archive-year">2026</h2>
-                            </div>
-                            
-                           
-                        <div class="article">
-                            <div class="article-header">
-                                <h1 class="article-title"><a href="/2026/05/06/%E5%8A%9B%E6%89%A3%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%9820260506/"><span>力扣每日一题20260506</span></a></h1>
-                                <div class="article-meta">
-                                    <span class="article-time">05-06</span>
-                                </div>
-                            </div>
-                        </div>
+                            <a href="/tags/%E6%A8%A1%E6%8B%9F/">模拟</a>
+                        
+                    </div>
+                
+                <div class="article-prev-next">
                     
-                           
-                        <div class="article">
-                            <div class="article-header">
-                                <h1 class="article-title"><a href="/2026/05/05/%E5%8A%9B%E6%89%A3%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%9820260505/"><span>力扣每日一题20260505</span></a></h1>
-                                <div class="article-meta">
-                                    <span class="article-time">05-05</span>
-                                </div>
-                            </div>
-                        </div>
                     
-                           
-                        <div class="article">
-                            <div class="article-header">
-                                <h1 class="article-title"><a href="/2026/05/03/%E5%8A%9B%E6%89%A3%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%9820260503/"><span>力扣每日一题20260503</span></a></h1>
-                                <div class="article-meta">
-                                    <span class="article-time">05-03</span>
-                                </div>
-                            </div>
-                        </div>
-                    
-                           
-                        <div class="article">
-                            <div class="article-header">
-                                <h1 class="article-title"><a href="/2026/05/02/%E5%8A%9B%E6%89%A3%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%9820260502/"><span>力扣每日一题20260502</span></a></h1>
-                                <div class="article-meta">
-                                    <span class="article-time">05-02</span>
-                                </div>
-                            </div>
-                        </div>
-                    
-                           
-                        <div class="article">
-                            <div class="article-header">
-                                <h1 class="article-title"><a href="/2026/05/02/2026-05-02-%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/"><span>我的第一篇文章</span></a></h1>
-                                <div class="article-meta">
-                                    <span class="article-time">05-02</span>
-                                </div>
-                            </div>
-                        </div>
+                        <a href="/2026/05/05/%E5%8A%9B%E6%89%A3%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%9820260505/" class="next-prefix">» </a> 下一篇：    <a href="/2026/05/05/%E5%8A%9B%E6%89%A3%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%9820260505/" title="发布于 2026-05-05 06:18">力扣每日一题20260505</a>
                     
                 </div>
             </div>
             
+    <div class="article-comments">
         
+            <div class="comments-title">
+                评论列表
+            </div>
+        
+        <div class="comments-content">
+            <script src="https://giscus.app/client.js"
+                    data-repo="xiaobai12354567/xiaobai12354567.github.io"
+                    data-repo-id="R_kgDORvEI-g"
+                    data-category="General"
+                    data-category-id="DIC_kwDORvEI-s4C8PuB"
+                    data-mapping="pathname"
+                    data-strict="0"
+                    data-reactions-enabled="1"
+                    data-emit-metadata="0"
+                    data-input-position="bottom"
+                    data-theme="preferred_color_scheme"
+                    data-lang="zh-CN"
+                    crossorigin="anonymous"
+                    async>
+            </script>
+        </div>
+    </div>
+
+        </div>
     
 </div>
     <div id="footer">
