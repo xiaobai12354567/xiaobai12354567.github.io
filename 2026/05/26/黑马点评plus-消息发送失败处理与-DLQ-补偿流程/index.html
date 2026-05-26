@@ -9,7 +9,7 @@
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <title>
         
-            黑马点评plus--异步秒杀重构升级
+            黑马点评plus--消息发送失败处理与 DLQ 补偿流程
         
     </title>
     <link rel="shortcut icon" href="#"/>
@@ -38,11 +38,11 @@
     <div class="vertical">
         <div class="inner">
             
-                <h1 class="header-subtitle">黑马点评plus--异步秒杀重构升级</h1>
+                <h1 class="header-subtitle">黑马点评plus--消息发送失败处理与 DLQ 补偿流程</h1>
                 <div class="header-subinfo">
                     <p class="article-info-text">
                         <span>
-                            <i class="iconfont icon-time"></i> 发表时间：2026-05-21
+                            <i class="iconfont icon-time"></i> 发表时间：2026-05-26
                         </span>
                     </p>
                     
@@ -52,7 +52,9 @@
                     
                     
                         
-                            <span class="tag-color">高并发</span>
+                            <span class="tag-color">DLQ</span>
+                        
+                            <span class="tag-color">kafka</span>
                         
                     
                 </div>
@@ -74,29 +76,13 @@
         <div id="article">
             <div class="toc"></div>
             <div class="article-body">
-                <h1 id="黑马点评plus-–异步秒杀重构升级"><a href="#黑马点评plus-–异步秒杀重构升级" class="headerlink" title="黑马点评plus –异步秒杀重构升级"></a>黑马点评plus –异步秒杀重构升级</h1><blockquote>
-<p> 参考 <em>阿星不是程序员</em> 的开源项目</p>
-<p> <a target="_blank" rel="noopener" href="https://gitee.com/java-up-up/hmdp-plus">https://gitee.com/java-up-up/hmdp-plus</a></p>
+                <h1 id="消息发送失败处理与-DLQ-补偿流程"><a href="#消息发送失败处理与-DLQ-补偿流程" class="headerlink" title="消息发送失败处理与 DLQ 补偿流程"></a>消息发送失败处理与 DLQ 补偿流程</h1><blockquote>
+<p>来自javaup中的点评plus项目,<a target="_blank" rel="noopener" href="https://javaup.chat/hmdp-plus/cache-architecture/message-dlq-compensation">链接</a>   </p>
 </blockquote>
-<h2 id="前端发起请求"><a href="#前端发起请求" class="headerlink" title="前端发起请求"></a>前端发起请求</h2><p>localhost:8085&#x2F;voucher-order&#x2F;seckill&#x2F;{id} , 后端接受一个voucherId 后续seckillVoucher方法执行下单逻辑 </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Result&lt;Long&gt; <span class="title function_">seckillVoucher</span><span class="params">(Long voucherId)</span>;</span><br></pre></td></tr></table></figure>
+<p>当优惠券信息更改了,  使用消息发送到 Kafka 来通知消费者清除缓存，包括自己的本地缓存和 Redis 缓存，但是如果发送 Kafka 失败了呢？</p>
+<h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图:"></a>流程图:</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    A[业务调用 sendRecord 发送缓存失效消息] --&gt; B[Kafka Producer 发送消息]</span><br><span class="line">    </span><br><span class="line">    B --&gt;|发送成功| C[afterSendSuccess]</span><br><span class="line">    C --&gt; C1[记录成功指标]</span><br><span class="line">    C1 --&gt; C2&#123;是否是 DLQ 重放消息?&#125;</span><br><span class="line">    C2 --&gt;|是| C3[记录 DLQ 重放成功]</span><br><span class="line">    C2 --&gt;|否| C4[流程结束]</span><br><span class="line">    </span><br><span class="line">    B --&gt;|发送失败| D[afterSendFailure]</span><br><span class="line">    D --&gt; D1[记录错误日志]</span><br><span class="line">    D1 --&gt; D2&#123;当前 topic 是否为 DLQ?&#125;</span><br><span class="line">    D2 --&gt;|是| D3[记录 DLQ 失败指标]</span><br><span class="line">    D3 --&gt; D4[结束]</span><br><span class="line">    </span><br><span class="line">    D2 --&gt;|否| E[记录普通发送失败指标]</span><br><span class="line">    E --&gt; F[读取 headers.retryCount]</span><br><span class="line">    F --&gt; G&#123;retryCount &lt; 最大重试次数?&#125;</span><br><span class="line">    </span><br><span class="line">    G --&gt;|是| H[计算指数退避时间 backoff]</span><br><span class="line">    H --&gt; I[retryCount + 1]</span><br><span class="line">    I --&gt; J[写入 lastError]</span><br><span class="line">    J --&gt; K[sleepQuietly 退避等待]</span><br><span class="line">    K --&gt; L[重新 sendRecord]</span><br><span class="line">    L --&gt; B</span><br><span class="line">    </span><br><span class="line">    G --&gt;|否| M[构建 DLQ 原因]</span><br><span class="line">    M --&gt; N[sendToDlq]</span><br><span class="line">    N --&gt;|成功| O[记录 DLQ 成功指标]</span><br><span class="line">    O --&gt; P[审计日志 AUDIT]</span><br><span class="line">    P --&gt; Q[结束]</span><br><span class="line">    </span><br><span class="line">    N --&gt;|失败| R[记录 DLQ 失败指标]</span><br><span class="line">    R --&gt; S[人工介入]</span><br></pre></td></tr></table></figure>
 
-<p>​	</p>
-<h2 id="整体流程图"><a href="#整体流程图" class="headerlink" title="整体流程图"></a>整体流程图</h2><p><img src="https://cdn.jsdelivr.net/gh/xiaobai12354567/blog-CDN@master/static/image/article/%E6%95%B4%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="整流程图"></p>
-<h2 id="查询优惠券信息-by-Id"><a href="#查询优惠券信息-by-Id" class="headerlink" title="查询优惠券信息(by Id)"></a>查询优惠券信息(by Id)</h2><blockquote>
-<p>优惠券信息查询使用多级缓存存储优惠券信息,  <strong>双重判断 + 缓存空值 + 分布式锁 + 布隆过滤器</strong> 组合的方案来解决缓存击穿和穿透的问题</p>
-</blockquote>
-<h3 id="流程图-gpt生成"><a href="#流程图-gpt生成" class="headerlink" title="流程图(gpt生成)"></a>流程图(gpt生成)</h3><p><img src="https://cdn.jsdelivr.net/gh/xiaobai12354567/blog-CDN@master/static/image/article/%E6%9F%A5%E8%AF%A2%E4%BC%98%E6%83%A0%E5%88%B8%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="查询优惠券流程图"></p>
-<h3 id="为什么要-两次检查-Redis-缓存-是否命中"><a href="#为什么要-两次检查-Redis-缓存-是否命中" class="headerlink" title="为什么要  两次检查 Redis 缓存 是否命中 ?"></a>为什么要  两次检查 Redis 缓存 是否命中 ?</h3><ul>
-<li>防止缓存击穿</li>
-<li>避免大量线程同时查数据库</li>
-</ul>
-<p>一个线程来到 了 ,去查 <em>本地缓存</em> 和  <em>redis</em>  都没命中 ,就会去查 <em>数据库</em>,但是 此时这个线程, 还没有来得及重写到redis中时,又有一大批线程来了,此时虽然第一个线程已经查到了,但这些线程仍然需要去查数据库 ,这样就造成大量数据库的查询操作 ,影响性能 .</p>
-<h4 id="分布式锁-再次判断redis解决-解决缓存击穿"><a href="#分布式锁-再次判断redis解决-解决缓存击穿" class="headerlink" title="分布式锁+再次判断redis解决 解决缓存击穿"></a>分布式锁+再次判断redis解决 解决缓存击穿</h4><p>此时 , 一个线程来了 ,去查 <em>本地缓存</em> 和  <em>redis</em>  都没命中, 接着 这个线程会和其他一大批线程竞争分布式锁  ,只有拿到锁的 &#x3D;&#x3D;<em>线程</em>&#x3D;&#x3D;  继续往后走</p>
-<p>其他线程等待 ,等这个线程执行结束了 ( 查完数据库 -&gt; 写入缓存), 释放锁 ,其他线程才能继续竞争锁 ,往后执行, 再次判断redis 是否命中 ,命中直接返回,从而 当很多相同的并发查询来到时, 只允许一个线程去数据库查询拿信息再写回缓存(分布式锁),  大大减少了数据库的压力.</p>
-<blockquote>
-<p>注意: 这个在查询优惠券库存时 也用到了</p>
-</blockquote>
+
 
                 
                 <p class="end">__END__</p>
@@ -109,7 +95,7 @@
     <div class="suffix-box-right">
         <span class="suffix-box-title">文章作者：</span>Live For Code
         <br>
-        <span class="suffix-box-title">文章出处：</span><a href="/2026/05/21/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84plus-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E9%87%8D%E6%9E%84%E5%8D%87%E7%BA%A7/" target="_blank">黑马点评plus--异步秒杀重构升级</a>
+        <span class="suffix-box-title">文章出处：</span><a href="/2026/05/26/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84plus-%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81%E5%A4%B1%E8%B4%A5%E5%A4%84%E7%90%86%E4%B8%8E-DLQ-%E8%A1%A5%E5%81%BF%E6%B5%81%E7%A8%8B/" target="_blank">黑马点评plus--消息发送失败处理与 DLQ 补偿流程</a>
         <br>
         <span class="suffix-box-title">作者签名：</span>我没想好
         <br>
@@ -132,17 +118,16 @@
                     <div class="tag">
                         标签：
                         
-                            <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/">高并发</a>
+                            <a href="/tags/DLQ/">DLQ</a>
+                        
+                            <a href="/tags/kafka/">kafka</a>
                         
                     </div>
                 
                 <div class="article-prev-next">
                     
-                        <a href="/2026/05/26/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84plus-%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81%E5%A4%B1%E8%B4%A5%E5%A4%84%E7%90%86%E4%B8%8E-DLQ-%E8%A1%A5%E5%81%BF%E6%B5%81%E7%A8%8B/" class="prev-prefix">« </a> 上一篇：    <a href="/2026/05/26/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84plus-%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81%E5%A4%B1%E8%B4%A5%E5%A4%84%E7%90%86%E4%B8%8E-DLQ-%E8%A1%A5%E5%81%BF%E6%B5%81%E7%A8%8B/" title="发布于 2026-05-26 09:56">黑马点评plus--消息发送失败处理与 DLQ 补偿流程</a>
-                        <br>
                     
-                    
-                        <a href="/2026/05/06/%E5%8A%9B%E6%89%A3%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%9820260506/" class="next-prefix">» </a> 下一篇：    <a href="/2026/05/06/%E5%8A%9B%E6%89%A3%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%9820260506/" title="发布于 2026-05-06 10:56">力扣每日一题20260506</a>
+                        <a href="/2026/05/21/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84plus-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E9%87%8D%E6%9E%84%E5%8D%87%E7%BA%A7/" class="next-prefix">» </a> 下一篇：    <a href="/2026/05/21/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84plus-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E9%87%8D%E6%9E%84%E5%8D%87%E7%BA%A7/" title="发布于 2026-05-21 12:00">黑马点评plus--异步秒杀重构升级</a>
                     
                 </div>
             </div>
